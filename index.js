@@ -13,7 +13,7 @@ const pool = new Pool({
 });
 
 async function initDb() {
-  await pool.query(
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS products (
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
@@ -32,7 +32,7 @@ async function initDb() {
       quantity INTEGER NOT NULL,
       price NUMERIC(10,2) NOT NULL
     );
-  );
+  `);
 }
 
 app.get("/", (req, res) => res.send("mf_pos_app is running"));
