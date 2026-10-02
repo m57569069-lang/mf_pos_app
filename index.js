@@ -1,3 +1,6 @@
+const express = require("express");
+const { Pool } = require("pg");
+
 const app = express();
 app.use(express.json());
 app.use(require("cors")());
@@ -102,3 +105,4 @@ app.post("/sales", async (req, res) => {
 initDb()
   .then(() => app.listen(PORT, "0.0.0.0", () => console.log("Listening on port " + PORT)))
   .catch((e) => { console.error("DB init failed", e); process.exit(1); });
+
