@@ -3,10 +3,6 @@ const { Pool } = require("pg");
 
 const app = express();
 app.use(express.json());
-app.use((req, res, next) => {
-  if (req.url.startsWith("/api/")) req.url = req.url.slice(4);
-  next();
-});
 const PORT = process.env.PORT || 3000;
 
 const pool = new Pool({
@@ -39,19 +35,22 @@ async function initDb() {
   `);
 }
 
-app.get("/", (req, res) => res.send("mf_pos_app is running"));
+const api = express.Router();
 
-app.get("/products", async (req, res) => {
+api.get("/", (req, res) => res.json({ status: "ok", service: "mf_pos_app api" }));
+api.get("/health", (req, res) => res.json({ status: "ok" }));
+
+api.get("/products", async (req, res) => {
   try {
     const r = await pool.query("SELECT * FROM products ORDER BY id");
-    res.json(r.rows);
+    res.json({ products: r.rows });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Database error" });
   }
 });
 
-app.post("/products", async (req, res) => {
+api.post("/products", async (req, res) => {
   const { name, price, stock } = req.body;
   if (!name || price == null) return res.status(400).json({ error: "name and price required" });
   try {
@@ -66,7 +65,7 @@ app.post("/products", async (req, res) => {
   }
 });
 
-app.post("/sales", async (req, res) => {
+api.post("/sales", async (req, res) => {
   const items = req.body.items;
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: "items required" });
@@ -100,6 +99,9 @@ app.post("/sales", async (req, res) => {
     client.release();
   }
 });
+
+app.get("/", (req, res) => res.send("mf_pos_app is running"));
+app.use("/api", api);
 
 initDb()
   .then(() => app.listen(PORT, "0.0.0.0", () => console.log("Listening on port " + PORT)))
