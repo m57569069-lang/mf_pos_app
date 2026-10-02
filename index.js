@@ -3,6 +3,10 @@ const { Pool } = require("pg");
 
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+  if (req.url.startsWith("/api/")) req.url = req.url.slice(4);
+  next();
+});
 const PORT = process.env.PORT || 3000;
 
 const pool = new Pool({
