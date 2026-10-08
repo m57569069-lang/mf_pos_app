@@ -703,7 +703,6 @@ async function checkout() {
     state.cart = [];
     state.sheet = { type: "receipt", sale };
     await reload();
-    showToast("Sale recorded");
   } catch (error) {
     showToast(error.message, "err");
   } finally {
