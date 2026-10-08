@@ -1,6 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
+const {
+  buildAnalyticsForecast,
+  regressionFromRequest,
+  parseForecastYear,
+} = require("./lib/salesForecast");
 
 const app = express();
 app.use(cors());
@@ -263,6 +268,40 @@ api.delete(
       ]);
     }
     res.json({ ok: true });
+  })
+);
+
+// ------------------------------------------------ Linear regression analytics
+// Learns a line from months that already happened and projects the rest of
+// the year. This is the forecast the analytics screen should plot.
+api.get(
+  "/analytics/forecast",
+  wrap(async (req, res) => {
+    const year = parseForecastYear(req.query.year);
+    if (year === null) {
+      return res.status(400).json({ error: "year must be an integer from 2000 to 2100." });
+    }
+    const forecast = buildAnalyticsForecast({
+      products: await listAll("products"),
+      transactions: await listAll("transactions"),
+      purchaseOrders: await listAll("purchase_orders"),
+      year,
+      productId: req.query.productId,
+    });
+    if (forecast.productNotFound) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    delete forecast.productNotFound;
+    res.json(forecast);
+  })
+);
+
+api.post(
+  "/analytics/linear-regression",
+  wrap(async (req, res) => {
+    const result = regressionFromRequest(req.body);
+    if (result.error) return res.status(400).json({ error: result.error });
+    res.json(result);
   })
 );
 
