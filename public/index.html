@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#143f38" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="description" content="Mobile sales and inventory counter with linear regression forecasts." />
+    <title>Counter · Sales & inventory</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,520;6..72,640&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div class="phone" id="app">
+        <div id="view" class="view"></div>
+        <div id="dock"></div>
+        <nav class="tabs" aria-label="Primary">
+          <button type="button" data-action="go" data-view="home">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg>
+            Home
+          </button>
+          <button type="button" data-action="go" data-view="sell">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10l1 13H6L7 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+            Sell
+          </button>
+          <button type="button" data-action="go" data-view="stock">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M4 7l2-3h12l2 3M12 10v6M9 13h6"/></svg>
+            Stock
+          </button>
+          <button type="button" data-action="go" data-view="insights">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16l5-5 3 3 7-8"/><path d="M4 19h16"/></svg>
+            Insights
+          </button>
+        </nav>
+        <div id="sheet"></div>
+        <div id="toast" class="toast" hidden role="status"></div>
+      </div>
+    </div>
+    <noscript>Counter needs JavaScript to record sales and draw the forecast.</noscript>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
